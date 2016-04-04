@@ -1,0 +1,35 @@
+{
+  "name": "fantasy-football-server",
+  "version": "1.0.0",
+  "description": "Backend for the fantasy-football chrome extension ",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "mocha ./tests/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adierkens/fantasy-football-server.git"
+  },
+  "keywords": [
+    "fantasy",
+    "football"
+  ],
+  "author": "Adam Dierkens <adam@dierkens.com> (adamdierkens.com)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/adierkens/fantasy-football-server/issues"
+  },
+  "homepage": "https://github.com/adierkens/fantasy-football-server#readme",
+  "dependencies": {
+    "body-parser": "^1.15.0",
+    "express": "^4.13.4",
+    "lodash": "^4.6.1",
+    "mongodb": "^2.1.8",
+    "nfl-game-stats": "git+https://github.com/adierkens/nfl-game-stats.git"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^2.4.5"
+  }
+}
