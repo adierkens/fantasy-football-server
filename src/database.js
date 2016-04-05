@@ -2,6 +2,7 @@
 var MongoClient = require('mongodb').MongoClient;
 var assert = require('assert');
 var url = 'mongodb://fantasyfootball:fantasyfootball@ds015740.mlab.com:15740/heroku_fgt30vfr';
+// var url = 'mongodb://localhost:27017/fantasyfootball';
 var db;
 
 const COLLECTIONS = {

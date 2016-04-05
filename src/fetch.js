@@ -23,7 +23,24 @@ var team = function(teamID, callback) {
   });
 };
 
+var game = function(gameID, callback) {
+  console.log(gameID);
+  var search = gameID;
+
+  if (typeof search === 'string') {
+    search = {
+      _id: gameID
+    };
+
+    database.games(search, function (docs) {
+      callback(docs);
+    })
+  }
+
+};
+
 module.exports = {
   player: player,
-  team: team
+  team: team,
+  game: game
 };

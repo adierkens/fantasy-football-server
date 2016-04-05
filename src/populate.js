@@ -17,7 +17,7 @@ function addTeamToDatabase(team) {
 }
 
 function addPlayerToDatabase(player, team) {
-  var playerID = (player.player__number + team.alias).toUpperCase();
+  var playerID = (team.alias + player.player__number).toUpperCase();
   player = _.pick(player, Object.keys(attributes.player));
 
   var playerDBObj = {};
@@ -36,7 +36,7 @@ function addPlayerGameToDatabase(game, playerID, weekNum) {
   var stats = _.pick(game, attributes.game);
   stats.weekNum = weekNum;
   stats.player = playerID;
-  stats._id = (playerID+weekNum).toUpperCase();
+  stats._id = (playerID + '-' + weekNum).toUpperCase();
   console.log('Adding stats ' + stats._id);
   database.addGame(stats);
 }

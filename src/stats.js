@@ -1,4 +1,6 @@
+var database = require('./database');
 var fetch = require('./fetch');
+var _ = require('lodash');
 
 var sampleStatObj = {
     filter: {
@@ -22,8 +24,7 @@ module.exports = function(statObj, callback) {
     statObj.filter.week = statObj.filter.week || {};
 
     var response = {
-        filter: statObj.filter,
-        weeks: new Array(16)
+        weeks: {}
     };
 
     var requestsInFlight = 0;
@@ -31,16 +32,15 @@ module.exports = function(statObj, callback) {
     // Find all the players that match the search obj
     
     fetch.player(statObj.filter.player, function(players) {
-
-        requestsInFlight -= 1;
-
         _.each(players, function(player) {
             // For each of the players grab their weekly stats
 
-            var weekFilter = statObj.filter.week;
+            var weekFilter = JSON.parse(JSON.stringify(statObj.filter.week));
             weekFilter.player = player._id;
 
-            fetch.games(weekFilter, function(games) {
+            requestsInFlight += 1;
+            
+            database.games(weekFilter, function(games) {
                 requestsInFlight -=1;
 
                 _.each(games, function (game) {
@@ -54,9 +54,8 @@ module.exports = function(statObj, callback) {
                         };
                     }
 
-                    _.each(Object.keys(game), function (gameKey) {
-                        var stat = game[gameKey];
-                        
+                    _.forEach(game, function (stat, gameKey) {
+
                         if (gameKey === "_id" ||
                             gameKey === "player" ||
                             gameKey === "weekNum" ) {
@@ -76,31 +75,34 @@ module.exports = function(statObj, callback) {
                     });
 
                     response.weeks[weekNum].count += 1;
-
-
-                });
-
-                var totalCount = response.weeks[weekNum].count;
-
-                _.each(Object.keys(response.weeks[weekNum]), function(key) {
-                    if (key === "count" ||
-                        key === "weekNum") {
-                        return;
-                    }
-
-                    response.weeks[weekNum][key] /= totalCount;
+                    
                 });
 
                 if (requestsInFlight === 0) {
+
+                    _.forEach(response.weeks, function(statsObj, weekNum) {
+
+                        var totalCount = statsObj.count;
+
+                        response.weeks[weekNum] = _.mapValues(statsObj, function(value, key) {
+                            if (key === "weekNum" || key === "count") {
+                                return value;
+                            }
+                            return value / totalCount;
+                        });
+
+                    });
+
+                    response.filter = statObj.filter;
+
                     callback(response);
+
                 }
+
             });
 
-            requestsInFlight += 1;
         });
         
     });
-
-    requestsInFlight += 1;
 
 };
