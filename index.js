@@ -2,6 +2,7 @@
 var express = require('express');
 var fetch = require('./src/fetch');
 var bodyparser = require('body-parser');
+var stats = require('./src/stats');
 
 var app = express();
 var port = process.env.PORT || 8888;
@@ -21,6 +22,26 @@ app.get('/players', function(req, res) {
   fetch.players(function(players) {
     res.send(players);
   });
+});
+
+
+app.post('/stat', function(req, res) {
+
+  if (Object.keys(req.body).length < 1) {
+    res.send({
+      status: 'error',
+      data: 'Must specify one or more fields to filter on'
+    });
+    return;
+  }
+
+  stats(req.body, function(response) {
+    res.send({
+      status: 'success',
+      data: response
+    });
+  });
+
 });
 
 app.post('/player', function(req, res) {

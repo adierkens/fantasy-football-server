@@ -55,6 +55,10 @@ var team = function(teamSearchObj, callback) {
   });
 };
 
+var games = function(gameSearchObj, callback) {
+  search(COLLECTIONS.GAMES, gameSearchObj, callback);
+};
+
 function addToCollection(collection, obj) {
   collection = db.collection(collection);
   collection.insertOne(obj);
@@ -80,6 +84,7 @@ module.exports = {
   player: player,
   players: players,
   team: team,
+  games: games,
   addPlayer: addPlayer,
   addTeam: addTeam,
   addGame: addGame,
