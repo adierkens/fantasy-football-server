@@ -24,7 +24,6 @@ app.get('/players', function(req, res) {
   });
 });
 
-
 app.post('/stat', function(req, res) {
 
   if (Object.keys(req.body).length < 1) {
@@ -105,6 +104,28 @@ app.get('/team/:teamID', function(req, res) {
       });
     }
   });
+});
+
+app.post('/userSave', function(req, res) {
+  if (req.body) {
+    if (req.body.operation === 'DELETE') {
+      var savedGraphID = req.body.savedGraphID;
+      fetch.delUserSave(savedGraphID);
+      res.sendStatus(200);
+    } else if (req.body.operation === 'ADD') {
+      var savedGraph = req.body.savedGraph;
+      fetch.addUserSave(savedGraph);
+      res.sendStatus(200);
+    } else {
+      // GET operation
+      fetch.userSavedGames(req.body.userID, function(savedGraphs) {
+        res.send({
+          status: 'success',
+          data: savedGraphs
+        });
+      });
+    }
+  }
 });
 
 app.listen(port, function() {

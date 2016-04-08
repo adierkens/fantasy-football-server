@@ -39,8 +39,28 @@ var game = function(gameID, callback) {
 
 };
 
+var userSavedGames = function(userID, callback) {
+  database.userSavedGames({
+    userID: userID
+  }, callback);
+};
+
+var addUserSave = function(saveObj) {
+  database.addUserSave(saveObj);
+};
+
+var delUserSave = function(saveID) {
+  var saveObj = {
+    _id: saveID
+  };
+  database.delUserSave(saveObj);
+};
+
 module.exports = {
   player: player,
   team: team,
-  game: game
+  game: game,
+  userSavedGames: userSavedGames,
+  addUserSave: addUserSave,
+  delUserSave: delUserSave
 };

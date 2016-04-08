@@ -8,7 +8,8 @@ var db;
 const COLLECTIONS = {
   PLAYERS: 'players',
   TEAMS: 'teams',
-  GAMES: 'games'
+  GAMES: 'games',
+  USER_SAVED_GRAPHS: 'userSavedGraphs'
 };
 
 MongoClient.connect(url, function(err, database) {
@@ -57,12 +58,22 @@ var team = function(teamSearchObj, callback) {
 };
 
 var games = function(gameSearchObj, callback) {
-  search(COLLECTIONS.GAMES, gameSearchObj, callback);
+    search(COLLECTIONS.GAMES, gameSearchObj, callback);
+};
+
+var userSavedGames = function(userSavedGamesObj, callback) {
+  search(COLLECTIONS.USER_SAVED_GRAPHS, userSavedGamesObj, callback);
 };
 
 function addToCollection(collection, obj) {
   collection = db.collection(collection);
-  collection.insertOne(obj);
+  collection.updateOne({_id: obj._id}, obj, { upsert: true });
+}
+
+function removeFromCollection(collection, obj) {
+  console.log(obj);
+  collection = db.collection(collection);
+  collection.deleteOne(obj);
 }
 
 var addPlayer = function(playerObj) {
@@ -77,6 +88,14 @@ var addGame = function(game) {
   addToCollection(COLLECTIONS.GAMES, game)
 };
 
+var addUserSave = function(userSave) {
+  addToCollection(COLLECTIONS.USER_SAVED_GRAPHS, userSave);
+};
+
+var delUserSave = function(userSaveID) {
+  removeFromCollection(COLLECTIONS.USER_SAVED_GRAPHS, userSaveID);
+};
+
 var dropAll = function() {
   db.dropDatabase();
 };
@@ -89,7 +108,10 @@ module.exports = {
   addPlayer: addPlayer,
   addTeam: addTeam,
   addGame: addGame,
-  dropAll: dropAll
+  dropAll: dropAll,
+  userSavedGames: userSavedGames,
+  addUserSave: addUserSave,
+  delUserSave: delUserSave
 };
 
 process.on('SIGTERM', function() {
