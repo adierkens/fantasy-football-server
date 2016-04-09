@@ -18,6 +18,12 @@ var allowCrossDomain = function(req, res, next) {
 app.use(allowCrossDomain);
 
 app.get('/players', function(req, res) {
+
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+  res.header('Access-Control-Allow-Headers', 'Content-Type');
+  res.header('Content-Type', 'application/json');
+
   console.log('Getting players');
   fetch.players(function(players) {
     res.send(players);
@@ -25,6 +31,11 @@ app.get('/players', function(req, res) {
 });
 
 app.post('/stat', function(req, res) {
+
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+  res.header('Access-Control-Allow-Headers', 'Content-Type');
+  res.header('Content-Type', 'application/json');
 
   if (Object.keys(req.body).length < 1) {
     res.send({
@@ -44,6 +55,11 @@ app.post('/stat', function(req, res) {
 });
 
 app.post('/player', function(req, res) {
+
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+  res.header('Access-Control-Allow-Headers', 'Content-Type');
+  res.header('Content-Type', 'application/json');
 
   if (Object.keys(req.body).length < 1) {
     res.send({
@@ -68,45 +84,14 @@ app.post('/player', function(req, res) {
   });
 });
 
-app.get('/player/:playerID', function(req, res) {
-  fetch.player(req.params.playerID, function(player) {
-    if (player) {
-      res.send({
-        status: 'success',
-        data: player
-      });
-    } else {
-      res.send({
-        status: 'error',
-        message: 'No player with that ID found'
-      });
-    }
-  });
-});
-
-app.get('/teams', function(req, res) {
-  fetch.teams(function(teams) {
-    res.send(teams);
-  })
-});
-
-app.get('/team/:teamID', function(req, res) {
-  fetch.team(req.params.teamID, function(team) {
-    if (team) {
-      res.send({
-        status: 'success',
-        data: team
-      });
-    } else {
-      res.send({
-        status: 'error',
-        data: 'No team with that ID found'
-      });
-    }
-  });
-});
 
 app.post('/userSave', function(req, res) {
+
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+  res.header('Access-Control-Allow-Headers', 'Content-Type');
+  res.header('Content-Type', 'application/json');
+
   if (req.body) {
     if (req.body.operation === 'DELETE') {
       var savedGraphID = req.body.savedGraphID;
