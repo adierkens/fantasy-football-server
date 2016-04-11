@@ -1,8 +1,10 @@
 'use strict';
 var MongoClient = require('mongodb').MongoClient;
-var username = process.env.FF_MONGO_USERNAME;
-var password = process.env.FF_MONGO_PASSWORD;
-var url = 'mongodb://' + username + ':' + password + '@ds015740.mlab.com:15740/heroku_fgt30vfr';
+const config = require('./config');
+
+const username = process.env.FF_MONGO_USERNAME;
+const password = process.env.FF_MONGO_PASSWORD;
+const url = 'mongodb://' + username + ':' + password + '@' + config.database.host + ':' + config.database.port + '/' + config.database.database;
 var db;
 
 const COLLECTIONS = {
